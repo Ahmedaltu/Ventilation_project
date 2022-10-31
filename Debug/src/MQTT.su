@@ -1,0 +1,9 @@
+gthr-default.h:229:1:int __gthread_key_delete(__gthread_key_t)	16	static
+MQTT.cpp:15:1:MQTT::MQTT(void (*)(MessageData*))	16	static
+MQTT.cpp:22:5:int MQTT::connect(const char*, const char*, char*, int)	48	static
+MQTT.cpp:38:6:void MQTT::disconnect()	16	static
+MQTT.cpp:43:5:int MQTT::subscribe(const char*)	16	static
+MQTT.cpp:49:5:int MQTT::publish(const char*, char*, size_t)	40	static
+MQTT.cpp:62:5:int MQTT::publish(const char*, std::string, size_t)	24	static
+MQTT.cpp:67:5:int MQTT::yield(int)	16	static
+MQTT.cpp:73:5:int MQTT::get_status() const	16	static

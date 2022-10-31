@@ -1,0 +1,20 @@
+core_cm3.h:1323:22:void NVIC_EnableIRQ(IRQn_Type)	16	static
+core_cm3.h:1375:22:void NVIC_ClearPendingIRQ(IRQn_Type)	16	static
+sysctl_15xx.h:185:20:void Chip_SYSCTL_PeriphReset(CHIP_SYSCTL_PERIPH_RESET_T)	16	static
+iocon_15xx.h:95:20:void Chip_IOCON_PinMuxSet(LPC_IOCON_T*, uint8_t, uint8_t, uint32_t)	24	static
+gpio_15xx.h:95:20:void Chip_GPIO_SetPinState(LPC_GPIO_T*, uint8_t, uint8_t, bool)	16	static
+gpio_15xx.h:121:20:bool Chip_GPIO_GetPinState(LPC_GPIO_T*, uint8_t, uint8_t)	16	static
+gpio_15xx.h:146:20:void Chip_GPIO_SetPinDIROutput(LPC_GPIO_T*, uint8_t, uint8_t)	16	static
+gpio_15xx.h:158:20:void Chip_GPIO_SetPinDIRInput(LPC_GPIO_T*, uint8_t, uint8_t)	16	static
+pinint_15xx.h:79:20:void Chip_PININT_Init(LPC_PIN_INT_T*)	16	static
+pinint_15xx.h:101:20:void Chip_PININT_SetPinModeEdge(LPC_PIN_INT_T*, uint32_t)	16	static
+pinint_15xx.h:171:20:void Chip_PININT_EnableIntLow(LPC_PIN_INT_T*, uint32_t)	16	static
+pinint_15xx.h:245:20:void Chip_PININT_ClearIntStatus(LPC_PIN_INT_T*, uint32_t)	16	static
+inmux_15xx.h:221:20:void Chip_INMUX_PinIntSel(uint8_t, uint8_t, uint8_t)	16	static
+DigitalIoPin.cpp:12:1:DigitalIoPin::DigitalIoPin(int, int, DigitalIoPin::pinMode, bool)	32	static
+DigitalIoPin.cpp:34:1:DigitalIoPin::~DigitalIoPin()	16	static
+DigitalIoPin.cpp:34:1:virtual DigitalIoPin::~DigitalIoPin()	16	static
+DigitalIoPin.cpp:38:6:virtual bool DigitalIoPin::read()	16	static
+DigitalIoPin.cpp:42:6:void DigitalIoPin::write(bool)	16	static
+DigitalIoPin.cpp:46:6:void DigitalIoPin::enable_interrupt(const int&)	16	static
+DigitalIoPin.cpp:65:6:static void DigitalIoPin::init_gpio_interrupts()	8	static

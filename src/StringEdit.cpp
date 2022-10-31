@@ -1,0 +1,85 @@
+/*
+ * StringEdit.cpp
+ *
+ *  Created on: 20 Oct 2022
+ *      Author: ahmed
+ */
+
+
+
+
+#include "StringEdit.h"
+#include <cstdio>
+#include <string>
+
+std::atomic<bool> StringEdit::string_changed{ false };
+
+StringEdit::StringEdit(LiquidCrystal *lcd_, std::string editTitle, std::string* items_, int n):
+lcd(lcd_), title(editTitle), items(items_), length(n)
+{
+	value = 0;
+	edit = 0;
+	focus = false;
+}
+
+StringEdit::~StringEdit() {
+}
+
+void StringEdit::increment() {
+	edit++;
+	if (edit > length - 1) edit = 0;
+}
+
+void StringEdit::decrement() {
+	edit--;
+	if (edit < 0) edit = length - 1;
+}
+
+void StringEdit::accept() {
+	save();
+	string_changed = true;
+}
+
+void StringEdit::cancel() {
+	edit = value;
+}
+
+
+void StringEdit::setFocus(bool focus) {
+	this->focus = focus;
+}
+
+bool StringEdit::getFocus() {
+	return this->focus;
+}
+
+void StringEdit::display() {
+	lcd->clear();
+	lcd->setCursor(0,0);
+	lcd->print(title);
+	lcd->setCursor(0,1);
+	char s[17];
+	if(focus) {
+		snprintf(s, 17, "   [%9s]   ", &(items[edit][0]));
+	}
+	else {
+		snprintf(s, 17, "    %9s    ", &(items[edit][0]));
+	}
+	lcd->print(s);
+}
+
+
+void StringEdit::save() {
+	// set current value to be same as edit value
+	value = edit;
+	// todo: save current value for example to EEPROM for permanent storage
+}
+
+int StringEdit::getValue() {
+	return value;
+}
+
+void StringEdit::setValue(int value) {
+	edit = value;
+	save();
+}
