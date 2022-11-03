@@ -1,6 +1,4 @@
-src/Vantilation_project.o src/Vantilation_project.d: \
- ../src/Vantilation_project.cpp ../src/Ventilation_project.h \
- C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_board_nxp_lpcxpresso_1549\inc/board.h \
+src/Modbus_Drive.o src/Modbus_Drive.d: ../src/Modbus_Drive.cpp \
  C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/chip.h \
  C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/lpc_types.h \
  C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/sys_config.h \
@@ -48,32 +46,10 @@ src/Vantilation_project.o src/Vantilation_project.d: \
  C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/i2cm_15xx.h \
  C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/i2c_common_15xx.h \
  C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/i2cs_15xx.h \
- C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_board_nxp_lpcxpresso_1549\inc/board_api.h \
- C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/lpc_types.h \
- ../src/DigitalIoPin.h ../src/retarget_uart.h ../src/LpcUart.h \
- C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/ritimer_15xx.h \
- ../src/LiquidCrystal.h ../src/systick.h ../src/I2C.h \
- ../src/./modbus/ModbusMaster.h ../src/./modbus/word.h \
- ../src/./modbus/SerialPort.h ../src/./modbus/../LpcUart.h \
- ../src/./modbus/ModbusRegister.h ../src/./modbus/ModbusMaster.h \
- ../src/SimpleMenu.h ../src/MenuItem.h ../src/PropertyEdit.h \
- ../src/IntegerEdit.h ../src/StringEdit.h ../src/Modbus_Drive.h \
- ../src/EventQueue.h ../src/json.hpp ../src/./mqtt/esp8266_socket.h \
- ../src/paho.mqtt/MQTTClient-C/MQTTClient.h \
- ../src/paho.mqtt/MQTTClient-C/../../mqtt/MQTT_lpc1549.h \
- ../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/MQTTPacket.h \
- ../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTConnect.h \
- ../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTPublish.h \
- ../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTSubscribe.h \
- ../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTUnsubscribe.h \
- ../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTFormat.h \
- c:\users\ahmed\documents\mcuxpressoide_11.2.1_4149\workspace\vantilation_project\src\paho.mqtt\mqttpacket\src\mqttpacket.h \
- c:\users\ahmed\documents\mcuxpressoide_11.2.1_4149\workspace\vantilation_project\src\paho.mqtt\mqttpacket\src\stacktrace.h \
- ../src/jsmn.h ../src/MQTT.h
-
-../src/Ventilation_project.h:
-
-C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_board_nxp_lpcxpresso_1549\inc/board.h:
+ ../src/delay.h ../src/Modbus_Drive.h ../src/./modbus/ModbusMaster.h \
+ ../src/./modbus/word.h ../src/./modbus/SerialPort.h \
+ ../src/./modbus/../LpcUart.h ../src/./modbus/ModbusRegister.h \
+ ../src/./modbus/ModbusMaster.h
 
 C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/chip.h:
 
@@ -169,23 +145,9 @@ C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/i
 
 C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/i2cs_15xx.h:
 
-C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_board_nxp_lpcxpresso_1549\inc/board_api.h:
+../src/delay.h:
 
-C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/lpc_types.h:
-
-../src/DigitalIoPin.h:
-
-../src/retarget_uart.h:
-
-../src/LpcUart.h:
-
-C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/ritimer_15xx.h:
-
-../src/LiquidCrystal.h:
-
-../src/systick.h:
-
-../src/I2C.h:
+../src/Modbus_Drive.h:
 
 ../src/./modbus/ModbusMaster.h:
 
@@ -198,45 +160,3 @@ C:\Users\ahmed\Documents\MCUXpressoIDE_11.2.1_4149\workspace\lpc_chip_15xx\inc/r
 ../src/./modbus/ModbusRegister.h:
 
 ../src/./modbus/ModbusMaster.h:
-
-../src/SimpleMenu.h:
-
-../src/MenuItem.h:
-
-../src/PropertyEdit.h:
-
-../src/IntegerEdit.h:
-
-../src/StringEdit.h:
-
-../src/Modbus_Drive.h:
-
-../src/EventQueue.h:
-
-../src/json.hpp:
-
-../src/./mqtt/esp8266_socket.h:
-
-../src/paho.mqtt/MQTTClient-C/MQTTClient.h:
-
-../src/paho.mqtt/MQTTClient-C/../../mqtt/MQTT_lpc1549.h:
-
-../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/MQTTPacket.h:
-
-../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTConnect.h:
-
-../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTPublish.h:
-
-../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTSubscribe.h:
-
-../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTUnsubscribe.h:
-
-../src/paho.mqtt/MQTTClient-C/../../paho.mqtt/MQTTPacket/src/../../../paho.mqtt/MQTTPacket/src/MQTTFormat.h:
-
-c:\users\ahmed\documents\mcuxpressoide_11.2.1_4149\workspace\vantilation_project\src\paho.mqtt\mqttpacket\src\mqttpacket.h:
-
-c:\users\ahmed\documents\mcuxpressoide_11.2.1_4149\workspace\vantilation_project\src\paho.mqtt\mqttpacket\src\stacktrace.h:
-
-../src/jsmn.h:
-
-../src/MQTT.h:

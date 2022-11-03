@@ -28,6 +28,7 @@
 #include "SimpleMenu.h"
 #include "IntegerEdit.h"
 #include "StringEdit.h"
+#include "Modbus_Drive.h"
 #include "EventQueue.h"
 
 #include "json.hpp"
@@ -45,9 +46,9 @@
 #define BROKER_IP   (char *)"192.168.1.254"
 #define BROKER_PORT  1883
 
-#define MQTT_TOPIC_RECEIVE_SET   (const char *)"G07/controller/settings"
+#define MQTT_TOPIC_RECEIVE_SET   (const char *)"controller/settings"
 #define MQTT_TOPIC_SEND_STATUS      (const char *)"G07/controller/status"
-#define MQTT_TOPIC_SEND_SETTING     (const char *)"G07/controller/settings"
+#define MQTT_TOPIC_SEND_SETTING     (const char *)"controller/settings"
 
 #define DEBOUNCE             20
 

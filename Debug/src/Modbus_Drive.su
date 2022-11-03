@@ -1,0 +1,6 @@
+Modbus_Drive.cpp:20:1:Modbus_Drive::Modbus_Drive()	16	static
+Modbus_Drive.cpp:41:6:void Modbus_Drive::set_frequency(const uint16_t&)	24	static
+Modbus_Drive.cpp:51:5:int Modbus_Drive::get_frequency()	16	static
+Modbus_Drive.cpp:55:5:int Modbus_Drive::get_temp()	16	static
+Modbus_Drive.cpp:74:5:int Modbus_Drive::get_rh()	24	static
+Modbus_Drive.cpp:91:5:int Modbus_Drive::get_co2()	16	static

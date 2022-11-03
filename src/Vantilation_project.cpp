@@ -123,21 +123,6 @@ int main(void)
 	sw2.enable_interrupt(1);
 	sw3.enable_interrupt(2);
 
-    ModbusMaster node(1); // Create modbus object that connects to slave id 1
-    ModbusMaster node1(241); //rh&temp
-    ModbusMaster node2(240); //co2
-
-	node.begin(9600); // set transmission rate - other parameters are set inside the object and can't be changed here
-	node1.begin(9600);
-	node2.begin(9600);
-
-	ModbusRegister AO1(&node, 0);
-	ModbusRegister DI1(&node, 4, false);
-
-	ModbusRegister DI11(&node1, 0x0101, true); //temp
-	ModbusRegister DI12(&node1, 0x0100, true); //rh
-
-	ModbusRegister DI21(&node2, 0x0101, true); //c02
 
 
 	//SimpleMenu menu;
@@ -149,9 +134,9 @@ int main(void)
 	IntegerEdit *target_pressure= new IntegerEdit(&lcd, std::string("Target Pressure"), 120, 0, 1);
 	IntegerEdit *speed= new IntegerEdit(&lcd, std::string("Speed"), 100, 0, 1);
 	IntegerEdit *pressure= new IntegerEdit(&lcd, std::string("Pressure"), 120, 0, 1);
-	IntegerEdit *co2= new IntegerEdit(&lcd, std::string("CO2"), 120, 0, 1);
-	IntegerEdit *rh= new IntegerEdit(&lcd, std::string("RH"), 120, 0, 1);
-	IntegerEdit *temp= new IntegerEdit(&lcd, std::string("Temp"), 120, 0, 1);
+	IntegerEdit *co2= new IntegerEdit(&lcd, std::string("CO2"), 10000, 0, 1);
+	IntegerEdit *rh= new IntegerEdit(&lcd, std::string("RH"), 100, 0, 1);
+	IntegerEdit *temp= new IntegerEdit(&lcd, std::string("Temp"), 60, -40, 1);
 
 
 	menu.addItem(new MenuItem(mode));
@@ -162,7 +147,6 @@ int main(void)
 	menu.addItem(new MenuItem(co2));
 	menu.addItem(new MenuItem(rh));
 	menu.addItem(new MenuItem(temp));
-
 
 	mode->setValue(0);
 	target_Speed->setValue(0);
@@ -178,27 +162,31 @@ int main(void)
 	MQTT mqtt(mqtt_message_handler);
 	mqtt.connect(SSID, PASSWORD, BROKER_IP, BROKER_PORT);
 	mqtt.subscribe(MQTT_TOPIC_RECEIVE_SET);
+
 	int mqtt_status = 0;
 	int nr=0;
-	AO1.write(0);
+
 	char* statu[] = { "false", "true"};
 
 
 	jsmn_parser p;
-	jsmntok_t tokens[128]; // a number >= total number of tokens
+	jsmntok_t tokens[256]; // a number >= total number of tokens
+
+	Modbus_Drive mBus;
+	mBus.set_frequency(0);
 	while(1){
 
 		pressure->setValue(getPressure());
-		Sleep(200);
-		int tem=DI11.read()/10;
+
+		int tem=mBus.get_temp();      //-40 ... +60°C
 		temp->setValue(tem);
 		Sleep(200);
-		int humi=DI12.read()/10;
+		int humi=mBus.get_rh();       // 0 ... 100 %RH
 		rh->setValue(humi);
 		Sleep(200);
-		int co=DI21.read();
-		co2->setValue(co*10);
-		//Sleep(200);
+		int co=mBus.get_co2();        // 0 … 10 000 ppm CO2, working range -40 … +60 °C
+		co2->setValue((co));
+		Sleep(200);
 
 
 
@@ -214,7 +202,8 @@ int main(void)
 			if ( menu.getIndex()==1 ){
 				if(current_speed !=target_Speed->getValue()){
 
-					AO1.write(target_Speed->getValue()*10);
+					//AO1.write(target_Speed->getValue()*10);
+					mBus.set_frequency(target_Speed->getValue());
 					Sleep(200);
 					speed->setValue(target_Speed->getValue());
 
@@ -227,7 +216,8 @@ int main(void)
 				if(target_pressure->getValue() > current_pressure){
 					while(getPressure() < target_pressure->getValue()){
 						current_speed+=1;
-						AO1.write(current_speed*10);
+						//AO1.write(current_speed*10);
+						mBus.set_frequency(current_speed);
 						Sleep(200);
 
 
@@ -241,7 +231,8 @@ int main(void)
 				else if(target_pressure->getValue() < current_pressure){
 					while(getPressure() > target_pressure->getValue()){
 						current_speed-=1;
-						AO1.write(current_speed*10);
+						//AO1.write(current_speed*10);
+						mBus.set_frequency(current_speed);
 						Sleep(200);
 
 					}
@@ -260,6 +251,7 @@ int main(void)
 
 
 		if(mqtt_message_arrived){
+			jsmn_init(&p);
 			mqtt_message_arrived=false;
 			printf((mqtt_message + "\r\n").c_str());
             const char *mqtt_message_ = mqtt_message.c_str();
@@ -281,17 +273,23 @@ int main(void)
 			int speed_updated = std::stoi(set_point);
 
 			if(strncmp("false", set_mode, 5)== 0){
-				AO1.write(speed_updated*10);
+				mode->setValue(0);
+				target_Speed->setValue(speed_updated);
+				//AO1.write(speed_updated*10);
+				mBus.set_frequency(speed_updated);
 				Sleep(200);
-				target_Speed->setValue(speed_updated*10);
-				speed->setValue(speed_updated*10);
 
-			}else{
+				speed->setValue(speed_updated);
+
+
+			}else if (strncmp("true", set_mode, 4) == 0){
+				mode->setValue(1);
 				target_pressure->setValue(speed_updated);
 				if(target_pressure->getValue() > current_pressure){
 					while(getPressure() < target_pressure->getValue()){
-						current_speed+=1;
-						AO1.write(current_speed*10);
+						current_speed+=5;
+						mBus.set_frequency(current_speed);
+						//AO1.write(current_speed*10);
 						Sleep(200);
 
 
@@ -301,11 +299,13 @@ int main(void)
 
 
 
+
 				}
 				else if(target_pressure->getValue() < current_pressure){
 					while(getPressure() > target_pressure->getValue()){
-						current_speed-=1;
-						AO1.write(current_speed*10);
+						current_speed-=5;
+						//AO1.write(current_speed*10);
+						mBus.set_frequency(current_speed);
 						Sleep(200);
 
 					}
@@ -314,6 +314,8 @@ int main(void)
 				}
 
 			}
+			menu.event(MenuItem::show);
+			memset(tokens,0,256);
 
 		}
 

@@ -12,6 +12,7 @@ CPP_SRCS += \
 ../src/LpcUart.cpp \
 ../src/MQTT.cpp \
 ../src/MenuItem.cpp \
+../src/Modbus_Drive.cpp \
 ../src/SimpleMenu.cpp \
 ../src/StringEdit.cpp \
 ../src/Vantilation_project.cpp \
@@ -33,6 +34,7 @@ OBJS += \
 ./src/LpcUart.o \
 ./src/MQTT.o \
 ./src/MenuItem.o \
+./src/Modbus_Drive.o \
 ./src/SimpleMenu.o \
 ./src/StringEdit.o \
 ./src/Vantilation_project.o \
@@ -52,6 +54,7 @@ CPP_DEPS += \
 ./src/LpcUart.d \
 ./src/MQTT.d \
 ./src/MenuItem.d \
+./src/Modbus_Drive.d \
 ./src/SimpleMenu.d \
 ./src/StringEdit.d \
 ./src/Vantilation_project.d \
