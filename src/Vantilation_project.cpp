@@ -310,7 +310,7 @@ void delay_systick(const int ticks)
 	}
 }
 
-int16_t getPressure(){
+int16_t getPressure(){            //SDP600 pressure sensor
 	uint8_t tx[1];
 	uint8_t rx[3];
 	tx[0]=0xF1;
