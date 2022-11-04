@@ -2,7 +2,7 @@
 
 <h3>Requirments:</h3>
 1- LPC 1549\
-2- Arduino\
+2- Arduino
 3- Fan\
 4- HMP60                      //tempreature and humidity sensor\
 5- GMP252                      //CO2 sensor\
