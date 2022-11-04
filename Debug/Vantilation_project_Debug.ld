@@ -6,7 +6,7 @@
  * Generated linker script file for LPC1549
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v11.2.1 [Build 4149] [2020-10-07] on Nov 2, 2022 8:27:11 PM
+ * MCUXpresso IDE v11.2.1 [Build 4149] [2020-10-07] on Nov 4, 2022 2:40:53 PM
  */
 
 INCLUDE "Vantilation_project_Debug_library.ld"

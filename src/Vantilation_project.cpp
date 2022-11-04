@@ -8,7 +8,7 @@
 
 #if 1
 #include "Ventilation_project.h"
-static volatile std::atomic_int counter;
+
 
 #ifdef __cplusplus
 
@@ -42,6 +42,7 @@ extern "C" {
 		if (millis() - last_pressed < DEBOUNCE) return;
 		last_pressed = millis();
 
+		//Just focusing at the mode and target pressure and temperature with conditions.
 		if(menu.getIndex()==0 ) menu.event(MenuItem::ok);
 
 		if (mode->getValue() == 0 &&  menu.getIndex()==1 ) menu.event(MenuItem::ok);
@@ -73,9 +74,6 @@ void Sleep(int ms)
 
 
 
-
-std::string sample_json(int sample_number, int speed, int setpoint,int pressure, const char* mode, const char* error, int co2, int rh, int temp);
-//void handle_mqtt_input(current_mode, current_speed, current_pressure));
 int main(void)
 {
 
@@ -104,7 +102,7 @@ int main(void)
 	Chip_SWM_MovablePortPinAssign(SWM_SWO_O, 1, 2); // Needed for SWO printf
 
     Chip_RIT_Init(LPC_RITIMER);
-
+    //LCD configuration
 	DigitalIoPin *rs = new DigitalIoPin(0, 29, DigitalIoPin::output);
 	DigitalIoPin *en = new DigitalIoPin(0, 9, DigitalIoPin::output);
 	DigitalIoPin *d4 = new DigitalIoPin(0, 10, DigitalIoPin::output);
@@ -113,11 +111,13 @@ int main(void)
 	DigitalIoPin *d7 = new DigitalIoPin(0, 0, DigitalIoPin::output);
 	LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
+	//Buttons configuration
 	DigitalIoPin sw1(1, 8, DigitalIoPin::pullup, true);
 	DigitalIoPin sw2(0, 5, DigitalIoPin::pullup, true);
 	DigitalIoPin sw3(0, 6, DigitalIoPin::pullup, true);
 	DigitalIoPin sw4(0, 7, DigitalIoPin::pullup, true);
 
+	//Enabling interrupt
 	DigitalIoPin::init_gpio_interrupts();
 	sw1.enable_interrupt(0);
 	sw2.enable_interrupt(1);
@@ -125,9 +125,7 @@ int main(void)
 
 
 
-	//SimpleMenu menu;
-
-
+    //Items that will be displayed in the LCD
 	std::string modes[2] = { "Manual", "Automatic" };
 	mode= new StringEdit(&lcd, std::string("Mode"), modes, 2);
 	IntegerEdit *target_Speed= new IntegerEdit(&lcd, std::string("Target Speed"), 100, 0, 1);
@@ -148,6 +146,7 @@ int main(void)
 	menu.addItem(new MenuItem(rh));
 	menu.addItem(new MenuItem(temp));
 
+	//Setting initial items values with 0
 	mode->setValue(0);
 	target_Speed->setValue(0);
 	target_pressure->setValue(0);
@@ -159,35 +158,37 @@ int main(void)
 
 	menu.event(MenuItem::show);
 
+	//MQTT and WIFI connection initialization and configuration
 	MQTT mqtt(mqtt_message_handler);
 	mqtt.connect(SSID, PASSWORD, BROKER_IP, BROKER_PORT);
 	mqtt.subscribe(MQTT_TOPIC_RECEIVE_SET);
 
 	int mqtt_status = 0;
 	int nr=0;
-
 	char* statu[] = { "false", "true"};
 
 
 	jsmn_parser p;
 	jsmntok_t tokens[256]; // a number >= total number of tokens
 
+	//Initializing Modbus connection.
 	Modbus_Drive mBus;
 	mBus.set_frequency(0);
+
+
 	while(1){
 
+		//Getting sensors values.
 		pressure->setValue(getPressure());
 
 		int tem=mBus.get_temp();      //-40 ... +60°C
 		temp->setValue(tem);
-		Sleep(200);
+
 		int humi=mBus.get_rh();       // 0 ... 100 %RH
 		rh->setValue(humi);
-		Sleep(200);
-		int co=mBus.get_co2();        // 0 … 10 000 ppm CO2, working range -40 … +60 °C
-		co2->setValue((co));
-		Sleep(200);
 
+		int co=mBus.get_co2();        // 0 … 10 000 ppm CO2, working range -40 … +60 °C
+		co2->setValue(co);
 
 
 
@@ -195,88 +196,51 @@ int main(void)
 		int current_pressure= getPressure();
 
 
-
-
-
-		if (StringEdit::string_changed == true || IntegerEdit::integer_changed == true ) { //|| values_updates= true
+		if (StringEdit::string_changed == true || IntegerEdit::integer_changed == true ) {
 			if ( menu.getIndex()==1 ){
 				if(current_speed !=target_Speed->getValue()){
-
-					//AO1.write(target_Speed->getValue()*10);
-					mBus.set_frequency(target_Speed->getValue());
+					mBus.set_frequency(target_Speed->getValue()*10);
 					Sleep(200);
 					speed->setValue(target_Speed->getValue());
-
+					pressure->setValue(getPressure());
 				}
-				pressure->setValue(getPressure());
-
 			}
 
-			else if(menu.getIndex()==2){
-				if(target_pressure->getValue() > current_pressure){
-					while(getPressure() < target_pressure->getValue()){
-						current_speed+=1;
-						//AO1.write(current_speed*10);
-						mBus.set_frequency(current_speed);
-						Sleep(200);
-
-
-					}
-					pressure->setValue(getPressure());
-					speed->setValue(current_speed);
-
-
-
-				}
-				else if(target_pressure->getValue() < current_pressure){
-					while(getPressure() > target_pressure->getValue()){
-						current_speed-=1;
-						//AO1.write(current_speed*10);
-						mBus.set_frequency(current_speed);
-						Sleep(200);
-
-					}
-					pressure->setValue(getPressure());
-					speed->setValue(current_speed*10);
-				}
-
-			}
-
-
+			menu.event(MenuItem::show);
 			StringEdit::string_changed = false;
 			IntegerEdit::integer_changed = false;
 		}
 
 
-
-
-		if(mqtt_message_arrived){
+		if(mqtt_message_arrived){                  //Handling the coming setting from web UI
 			jsmn_init(&p);
 			mqtt_message_arrived=false;
-			printf((mqtt_message + "\r\n").c_str());
-            const char *mqtt_message_ = mqtt_message.c_str();
-			jsmn_parse(&p, mqtt_message_, 50, tokens, 256);
 
+			//printf((mqtt_message + "\r\n").c_str());
+            const char *mqtt_message_ = mqtt_message.c_str();
+			jsmn_parse(&p, mqtt_message_, 100, tokens, 256);
+
+			//Getting the mode value
 			jsmntok_t key = tokens[2];
 			unsigned int length = key.end - key.start;
 			char set_mode[length+1];
 			memcpy(set_mode, &mqtt_message_[key.start], length);
 			set_mode[length] = '\0';
-			printf("Key: %s\n", set_mode);
+			//printf("Key: %s\n", set_mode);
 
+			//Getting the setpoint value
 			jsmntok_t key_ = tokens[4];
 			unsigned int length_ = key_.end - key_.start;
 			char set_point[length_ + 1];
 			memcpy(set_point, &mqtt_message_[key_.start], length_);
-			set_point[length] = '\0';
-			printf("Key: %s\n", set_point);
+			set_point[length_] = '\0';
+			//printf("Key: %s\n", set_point);
 			int speed_updated = std::stoi(set_point);
 
 			if(strncmp("false", set_mode, 5)== 0){
 				mode->setValue(0);
 				target_Speed->setValue(speed_updated);
-				//AO1.write(speed_updated*10);
-				mBus.set_frequency(speed_updated);
+				mBus.set_frequency(speed_updated*10);
 				Sleep(200);
 
 				speed->setValue(speed_updated);
@@ -285,46 +249,38 @@ int main(void)
 			}else if (strncmp("true", set_mode, 4) == 0){
 				mode->setValue(1);
 				target_pressure->setValue(speed_updated);
-				if(target_pressure->getValue() > current_pressure){
-					while(getPressure() < target_pressure->getValue()){
-						current_speed+=5;
-						mBus.set_frequency(current_speed);
-						//AO1.write(current_speed*10);
-						Sleep(200);
-
-
-					}
-					pressure->setValue(getPressure());
-					speed->setValue(current_speed*10);
-
-
-
-
-				}
-				else if(target_pressure->getValue() < current_pressure){
-					while(getPressure() > target_pressure->getValue()){
-						current_speed-=5;
-						//AO1.write(current_speed*10);
-						mBus.set_frequency(current_speed);
-						Sleep(200);
-
-					}
-					pressure->setValue(getPressure());
-					speed->setValue(current_speed*10);
-				}
 
 			}
 			menu.event(MenuItem::show);
 			memset(tokens,0,256);
 
 		}
+		if(mode->getValue() == 1){
+			int tolerance = 2;
+
+			if(abs(target_pressure->getValue() - current_pressure) > tolerance){
+				double diff = (target_pressure->getValue() - current_pressure) / (double)120;
+				signed int diff_ = (signed int)(diff * 50);
+
+				current_speed += diff_;
+				/* limiting the values within the range */
+				if(current_speed > 100) current_speed = 100;
+				if(current_speed < 0) current_speed = 0;
+			}
+			mBus.set_frequency(current_speed*10);
+			Sleep(200);
+			speed->setValue(current_speed);
+
+		}
+
+
 
 		std::string sample = sample_json(nr,speed->getValue(), 10,pressure->getValue(), statu[mode->getValue()], statu[mqtt_status], co, humi, tem);
 	    mqtt_status = mqtt.publish(MQTT_TOPIC_SEND_STATUS,  sample, sample.length());
 		Sleep(2000); //every 2 seconds
 		nr++;
 		menu.event(MenuItem::show);
-		mqtt.yield(2000);
+
 
 	}
 	return 0;

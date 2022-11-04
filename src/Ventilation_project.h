@@ -16,13 +16,13 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <cstring>
-//#include "Sleep.h"
+
 #include "LpcUart.h"
 #include "ritimer_15xx.h"
 #include "LiquidCrystal.h"
 #include "systick.h"
 #include "I2C.h"
-//#include "ITMwarpper.h"
+
 #include "./modbus/ModbusMaster.h"
 #include "./modbus/ModbusRegister.h"
 #include "SimpleMenu.h"
@@ -46,9 +46,9 @@
 #define BROKER_IP   (char *)"192.168.1.254"
 #define BROKER_PORT  1883
 
-#define MQTT_TOPIC_RECEIVE_SET   (const char *)"controller/settings"
+#define MQTT_TOPIC_RECEIVE_SET   (const char *)"G07/controller/settings"
 #define MQTT_TOPIC_SEND_STATUS      (const char *)"G07/controller/status"
-#define MQTT_TOPIC_SEND_SETTING     (const char *)"controller/settings"
+
 
 #define DEBOUNCE             20
 
@@ -57,9 +57,11 @@ int16_t getPressure();
 void mqtt_message_handler(MessageData* data);
 static std::string mqtt_message("");
 static bool mqtt_message_arrived(false);
-
+std::string sample_json(int sample_number, int speed, int setpoint,int pressure, const char* mode, const char* error, int co2, int rh, int temp);
 static volatile uint32_t systicks(0);
 static volatile uint32_t last_pressed(0);
 static SimpleMenu menu;
 static StringEdit *mode;
+static volatile std::atomic_int counter;
+
 #endif /* VENTILATION_PROJECT_H_ */

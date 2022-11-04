@@ -97,7 +97,7 @@ int Modbus_Drive::get_co2(){
 	}*/
 
 
-   return read_co2_r.read()/10;
+   return (read_co2_r.read()/10)*100;
    delay_systick(500);
 }
 
