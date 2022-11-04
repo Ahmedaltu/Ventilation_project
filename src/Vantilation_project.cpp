@@ -95,7 +95,7 @@ int main(void)
 	/* Enable and setup SysTick Timer at a periodic rate */
 	SysTick_Config(SystemCoreClock / 1000);
 
-	//char buffer[100];
+
 	// this call initializes debug uart for stdout redirection
 	retarget_init();
 	/* Set up SWO to PIO1_2 */
@@ -180,7 +180,7 @@ int main(void)
 
 		//Getting sensors values.
 		pressure->setValue(getPressure());
-
+		Sleep(200);
 		int tem=mBus.get_temp();      //-40 ... +60°C
 		temp->setValue(tem);
 
@@ -196,20 +196,18 @@ int main(void)
 		int current_pressure= getPressure();
 
 
-		if (StringEdit::string_changed == true || IntegerEdit::integer_changed == true ) {
-			if ( menu.getIndex()==1 ){
-				if(current_speed !=target_Speed->getValue()){
-					mBus.set_frequency(target_Speed->getValue()*10);
-					Sleep(200);
-					speed->setValue(target_Speed->getValue());
-					pressure->setValue(getPressure());
-				}
-			}
 
-			menu.event(MenuItem::show);
-			StringEdit::string_changed = false;
-			IntegerEdit::integer_changed = false;
+		if ( mode->getValue() == 0){
+			if(current_speed !=target_Speed->getValue()){
+				mBus.set_frequency(target_Speed->getValue());
+				Sleep(200);
+				speed->setValue(target_Speed->getValue());
+
+			}
 		}
+		pressure->setValue(getPressure());
+		menu.event(MenuItem::show);
+
 
 
 		if(mqtt_message_arrived){                  //Handling the coming setting from web UI
@@ -240,7 +238,7 @@ int main(void)
 			if(strncmp("false", set_mode, 5)== 0){
 				mode->setValue(0);
 				target_Speed->setValue(speed_updated);
-				mBus.set_frequency(speed_updated*10);
+				mBus.set_frequency(speed_updated);
 				Sleep(200);
 
 				speed->setValue(speed_updated);
@@ -251,11 +249,12 @@ int main(void)
 				target_pressure->setValue(speed_updated);
 
 			}
+			pressure->setValue(getPressure());
 			menu.event(MenuItem::show);
 			memset(tokens,0,256);
 
 		}
-		if(mode->getValue() == 1){
+		if(mode->getValue() == 1){               // Handling the pressure when system in auto mode
 			int tolerance = 2;
 
 			if(abs(target_pressure->getValue() - current_pressure) > tolerance){
@@ -267,14 +266,16 @@ int main(void)
 				if(current_speed > 100) current_speed = 100;
 				if(current_speed < 0) current_speed = 0;
 			}
-			mBus.set_frequency(current_speed*10);
-			Sleep(200);
+			mBus.set_frequency(current_speed);
+			Sleep(600);
 			speed->setValue(current_speed);
+
+
 
 		}
 
 
-
+        // Publishing to web
 		std::string sample = sample_json(nr,speed->getValue(), 10,pressure->getValue(), statu[mode->getValue()], statu[mqtt_status], co, humi, tem);
 	    mqtt_status = mqtt.publish(MQTT_TOPIC_SEND_STATUS,  sample, sample.length());
 		Sleep(2000); //every 2 seconds
