@@ -1,6 +1,6 @@
 # Ventilation_project
 
-<h3>Requirments:</h3>\
+<h3>Requirments:</h3>
 1- LPC 1549\
 2- Arduino\
 3- Fan\
