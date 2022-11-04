@@ -12,5 +12,5 @@
 
 
 7- MCUXpresso IDE
-8- Vent
+8- Vent/
 9- Produal MIO 12-v
