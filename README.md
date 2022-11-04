@@ -4,9 +4,9 @@
 1- LPC 1549\
 2- Arduino
 3- Fan
-4- HMP60                      //tempreature and humidity sensor
-5- GMP252                      //CO2 sensor
-6- Pressure sensor
+4- HMP60                      //tempreature and humidity sensor\
+5- GMP252                      //CO2 sensor\
+6- Pressure sensor\
 
 
 
