@@ -12,10 +12,7 @@
 #include "delay.h"
 #include "Modbus_Drive.h"
 
-/**
- * @brief ABB Drive class encapsulates frequency control
- * Modbus interface is utilized
- */
+
 
 Modbus_Drive::Modbus_Drive():
 	fan_node(fan_ID), // Create modbus object that connects to slave id
