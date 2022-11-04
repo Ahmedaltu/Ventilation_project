@@ -1,7 +1,7 @@
 # Ventilation_project
 
 <h3>Requirments:</h3>
-1- LPC 1549
+1- LPC 1549\
 2- Arduino
 3- Fan
 4- HMP60                      //tempreature and humidity sensor
