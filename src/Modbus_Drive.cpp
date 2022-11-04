@@ -47,7 +47,7 @@ void Modbus_Drive::set_frequency(const uint16_t& freq)
 
 }
 
-
+//Just for checking fan plus
 int Modbus_Drive::get_frequency()
 {
 	return read_fan_r.read();
