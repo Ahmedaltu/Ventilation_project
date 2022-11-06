@@ -6,3 +6,9 @@
 <img width="600" alt="Screenshot 2022-11-06 at 23 47 38" src="https://user-images.githubusercontent.com/76178825/200196977-5b6c5273-74fa-4ccc-8263-d495d54ba080.png">
 
 
+
+
+References:
+https://www.vaisala.com/en/products/instruments-sensors-and-other- measurement-devices/instruments-industrial-measurements/gmp252
+https://www.vaisala.com/en/products/instruments-sensors-and-other- measurement-devices/instruments-industrial-measurements/hmp60
+https://sensirion.com/products/catalog/SDP600-25Pa/ https://github.com/nessa01macias/Ventilation-Project
