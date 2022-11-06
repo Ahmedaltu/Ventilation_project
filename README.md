@@ -9,6 +9,6 @@
 
 
 References:
-https://www.vaisala.com/en/products/instruments-sensors-and-other- measurement-devices/instruments-industrial-measurements/gmp252\
-https://www.vaisala.com/en/products/instruments-sensors-and-other- measurement-devices/instruments-industrial-measurements/hmp60
-https://sensirion.com/products/catalog/SDP600-25Pa/ https://github.com/nessa01macias/Ventilation-Project
+1- https://www.vaisala.com/en/products/instruments-sensors-and-other- measurement-devices/instruments-industrial-measurements/gmp252\
+2- https://www.vaisala.com/en/products/instruments-sensors-and-other- measurement-devices/instruments-industrial-measurements/hmp60
+3- https://sensirion.com/products/catalog/SDP600-25Pa/ https://github.com/nessa01macias/Ventilation-Project
